@@ -1,0 +1,81 @@
+.sl__box__prev,
+.sl__box__next {
+  cursor: pointer;
+  position: relative;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+  z-index: 3;
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 90%;
+  background-color: #e642f5;
+}
+
+.sl__box__prev,
+.sl__box__next {
+  visibility: hidden;
+}
+
+.sl__box__prev:active,
+.sl__box__next:active {
+  transform: scale(.9);
+}
+
+.sl__box__paging {
+  position: absolute;
+  top: 90%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  margin: 25px 0 0;
+  background: transparent;
+  z-index: 3;
+}
+
+.sl__box__paging__index {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin: 0 2px;
+  border: none;
+  border-radius: 50%;
+  filter: opacity(.35);
+  outline: none;
+  cursor: pointer;
+  background-color: #e642f5;
+}
+
+.sl__box__paging__index.active {
+  filter: opacity(1);
+}
+
+.sl__box__view {
+  overflow: hidden;
+  position: relative;
+  height: auto;
+  z-index: 2;
+  cursor: grab;
+}
+
+.sl__box__view.grabbing {
+  cursor: grabbing;
+}
+
+.sl__box__view__wrapper {
+  top: 0;
+  position: relative;
+  display: flex;
+  padding: 10px 0;
+  z-index: 1;
+}
+
+.sl__box__view__wrapper.shifting {
+  transition: left .3s ease-out;
+}
