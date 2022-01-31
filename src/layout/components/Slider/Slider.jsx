@@ -6,9 +6,10 @@ import Slide from './Slide/Slide'
 import Wrapper from './Wrapper/Wrapper'
 
 // dependencies
-import {useWindowSize} from '../../../hooks/useWindowSize'
+import { useWindowSize } from '../../../hooks/useWindowSize'
 import { useEffect, useReducer } from 'react'
 import { initialSliderState, sliderMiddleware } from '../../../store/Slider'
+import { resize } from '../../../store/Slider/actions'
 
 export default function Slider() {
   const [sliderState, sliderDispatch] = useReducer(
@@ -16,7 +17,7 @@ export default function Slider() {
     initialSliderState
   )
 
-  const [width] = useWindowSize()
+  const [innerWidth] = useWindowSize()
 
   useEffect(() => {
     const options = [
@@ -28,48 +29,31 @@ export default function Slider() {
         showButtons: false,
         showPaging: false,
         infinite: false,
-        breakpoint: 900
-      } 
+        breakpoint: 900,
+      },
     ]
-
-    if (!sliderState.isLoaded) {
-      // sliderBuild
+      
+    // Resize the slider main exhibition properties
+    if (sliderState.windowSize !== innerWidth) {
+      resize(sliderDispatch, options, innerWidth)
     }
 
     console.log(sliderState)
 
-  }, [sliderState, width])
+  }, [sliderState, innerWidth])
 
   return (
     <div className='sl'>
       <Wrapper properties={sliderState} dispatch={sliderDispatch}>
-        <Slide properties={sliderState}>
-          slider 01
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 02
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 03
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 04
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 05
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 06
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 07
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 08
-        </Slide>
-        <Slide properties={sliderState}>
-          slider 09
-        </Slide>
+        <Slide properties={sliderState}>slider 01</Slide>
+        <Slide properties={sliderState}>slider 02</Slide>
+        <Slide properties={sliderState}>slider 03</Slide>
+        <Slide properties={sliderState}>slider 04</Slide>
+        <Slide properties={sliderState}>slider 05</Slide>
+        <Slide properties={sliderState}>slider 06</Slide>
+        <Slide properties={sliderState}>slider 07</Slide>
+        <Slide properties={sliderState}>slider 08</Slide>
+        <Slide properties={sliderState}>slider 09</Slide>
       </Wrapper>
     </div>
   )

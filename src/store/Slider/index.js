@@ -10,8 +10,8 @@ const initialSliderState = {
   showButtons: false,
   showPaging: false,
   isInfinite: false,
-  isLoaded: false,
-  breakpoints: {},
+  breakpoints: [],
+  status: 'null',
   // wrapper position properties
   index: 0,
   posX1: 0,
