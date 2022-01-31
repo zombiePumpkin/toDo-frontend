@@ -1,18 +1,28 @@
-import { useLayoutEffect, useState } from 'react';
+// dependencies
+import { useLayoutEffect, useReducer } from 'react'
+import { initialWindowSizeState, windowSizeMiddleware } from '../store/WindowSize'
+import { setSize } from '../store/WindowSize/actions'
 
 export function useWindowSize() {
-  const [size, setSize] = useState([0, 0])
+  const [windowSizeState, windowSizeDispatch] = useReducer(
+    windowSizeMiddleware,
+    initialWindowSizeState
+  )
 
   useLayoutEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight])
-    }
+    const updateSize = () =>
+      setSize(windowSizeDispatch, {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      })
 
     window.addEventListener('resize', updateSize)
+
     updateSize()
 
-    return () => window.removeEventListener('resize', updateSize);
-  }, []);
+    return () => window.removeEventListener('resize', updateSize)
 
-  return size
+  }, [])
+
+  return windowSizeState
 }

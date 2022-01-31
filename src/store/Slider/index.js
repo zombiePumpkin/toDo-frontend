@@ -30,4 +30,4 @@ function sliderMiddleware(state, action) {
   return sliderReducer(state, action)
 }
 
-export {initialSliderState, sliderMiddleware}
+export { initialSliderState, sliderMiddleware }
