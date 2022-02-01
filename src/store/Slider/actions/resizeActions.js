@@ -1,57 +1,73 @@
-function build(dispatch, options) {
-  const  initialOption = options[0]
-
+// Build the slider based on passed breakpoint
+function build(dispatch, breakpoint) {
   return dispatch({
     type: 'build',
     payload: {
-      slideSize: initialOption.slideSize,
-      windowSize: window.innerWidth,
-      slideMargin: initialOption.slideMargin,
-      slidesToShow: initialOption.slidesToShow,
-      slidesToShift: initialOption.slidesToShift,
-      showButtons: initialOption.showButtons,
-      showPaging: initialOption.showPaging,
-      isInfinite: initialOption.isInfinite,
-      isLoaded: initialOption.isLoaded,
-      breakpoints: options,
-    }
+      slideSize: breakpoint.slideSize,
+      slideMargin: breakpoint.slideMargin,
+      slidesToShow: breakpoint.slidesToShow,
+      slidesToShift: breakpoint.slidesToShift,
+      slidesToLoad: breakpoint.slidesToLoad,
+      showButtons: breakpoint.showButtons,
+      showPaging: breakpoint.showPaging,
+      isInfinite: breakpoint.isInfinite,
+    },
   })
 }
 
 // Handle breakpoints in the page
-export function resize(dispatch, options, innerWidth) {
-  handleBreakpoints: function () {
-    if (this.breakpoints.length > 1) {
-        for (var i = 0; i < this.breakpoints.length; i++) {
-            if (this.breakpoints[i + 1] != undefined) {
-                if (
-                    window.innerWidth <= this.breakpoints[i].breakpoint &&
-                    window.innerWidth > this.breakpoints[i + 1].breakpoint
-                ) {
-                    var breakpoint = JSON.parse(JSON.stringify(this.breakpoints[i]));
-                    this.resizeSlider(breakpoint);
-                }
-            } else {
-                if (
-                    window.innerWidth <= this.breakpoints[i].breakpoint &&
-                    window.innerWidth > 0
-                ) {
-                    var breakpoint = JSON.parse(JSON.stringify(this.breakpoints[i]));
-                    this.resizeSlider(breakpoint);
-                }
-            }
-        }
-    } else {
-        this.breakpoints.push({
-            slidesToShow: 1,
-            slidesToShift: 1,
-            showButtons: this.showButtons,
-            showPaging: this.showPaging,
-            infinite: this.infinite,
-            breakpoint: 500
-        });
+export function resize(dispatch, breakpoints, windowSize) {
+  if (breakpoints.length > 1) {
+    breakpoints.forEach((item, index) => {
+      if (
+        breakpoints[index + 1] !== undefined &&
+        item.breakpoint >= windowSize &&
+        item.breakpoint < windowSize
+      ) {
+        const breakpoint = { ...item }
+        build(dispatch, breakpoint)
+      } else if (item.breakpoint >= windowSize && windowSize > 0) {
+        const breakpoint = { ...item }
+        build(dispatch, breakpoint)
+      }
+    })
+  } else {
+    breakpoints.push({
+      slideSize: 190,
+      slideMargin: 5,
+      slidesToShow: 1,
+      slidesToShif: 1,
+      slidesToLoad: 9,
+      showButtons: false,
+      showPaging: false,
+      infinite: false,
+      breakpoint: 500,
+    })
 
-        this.handleBreakpoints();
-    }
-},
+    resize(dispatch, breakpoints, windowSize)
+  }
+}
+
+// Set the current width of the window size 
+export function setWindowSize(dispatch, windowSize) {
+  return dispatch({
+    type: 'set_window_size',
+    payload: { windowSize: windowSize },
+  })
+}
+
+// Set all the breakpoints passed to slider params
+export function setBreakpoints(dispatch, breakpoints) {
+  return dispatch({
+    type: 'set_breakpoints',
+    payload: { breakpoints: breakpoints },
+  })
+}
+
+// Set the slides length in the slider
+export function setSlidesLength(dispatch, slidesLength) {
+  return dispatch({
+    type: 'set_slides_length',
+    payload: { slidesLength: slidesLength },
+  })
 }

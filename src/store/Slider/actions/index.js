@@ -1,3 +1,3 @@
-import { resize } from './resizeActions'
+import { resize, setWindowSize, setBreakpoints, setSlidesLength } from './resizeActions'
 
-export { resize }
+export { resize, setWindowSize, setBreakpoints, setSlidesLength}

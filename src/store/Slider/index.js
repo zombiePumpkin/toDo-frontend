@@ -3,7 +3,6 @@ import sliderReducer from './reducers'
 const initialSliderState = {
   // exhibition properies
   slideSize: 0,
-  windowSize: 0,
   slideMargin: 0,
   slidesToShow: 0,
   slidesToShift: 0,
@@ -11,7 +10,8 @@ const initialSliderState = {
   showPaging: false,
   isInfinite: false,
   breakpoints: [],
-  status: 'null',
+  windowSize: 0,
+  status: 'not-loaded',
   // wrapper position properties
   index: 0,
   posX1: 0,

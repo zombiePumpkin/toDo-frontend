@@ -1,59 +1,87 @@
-// style
+// Style
 import './Slider.css'
 
-// components
+// Components
 import Slide from './Slide/Slide'
 import Wrapper from './Wrapper/Wrapper'
 
-// dependencies
+// Dependencies
 import { useWindowSize } from '../../../hooks/useWindowSize'
 import { useEffect, useReducer } from 'react'
 import { initialSliderState, sliderMiddleware } from '../../../store/Slider'
-import { resize } from '../../../store/Slider/actions'
+import {
+  resize,
+  setWindowSize,
+  setBreakpoints,
+  setSlidesLength,
+} from '../../../store/Slider/actions'
 
-export default function Slider() {
+export default function Slider(props) {
   const [sliderState, sliderDispatch] = useReducer(
     sliderMiddleware,
     initialSliderState
   )
 
-  const [innerWidth] = useWindowSize()
+  const [windowSize] = useWindowSize()
 
   useEffect(() => {
-    const options = [
+    const breakpoints = [
       {
         slideSize: 190,
         slideMargin: 5,
         slidesToShow: 3,
         slidesToShif: 3,
+        slidesToLoad: 9,
         showButtons: false,
         showPaging: false,
         infinite: false,
         breakpoint: 900,
       },
+      {
+        slideSize: 190,
+        slideMargin: 5,
+        slidesToShow: 2,
+        slidesToShif: 2,
+        slidesToLoad: 6,
+        showButtons: false,
+        showPaging: false,
+        infinite: false,
+        breakpoint: 500,
+      },
+      {
+        slideSize: 190,
+        slideMargin: 5,
+        slidesToShow: 1,
+        slidesToShif: 1,
+        slidesToLoad: 3,
+        showButtons: false,
+        showPaging: false,
+        infinite: false,
+        breakpoint: 300,
+      },
     ]
-      
+
     // Resize the slider main exhibition properties
-    if (sliderState.windowSize !== innerWidth) {
-      resize(sliderDispatch, options, innerWidth)
+    if (sliderState.windowSize !== windowSize) {
+      resize(sliderDispatch, breakpoints, windowSize)
+      setWindowSize(sliderDispatch, windowSize)
+      setSlidesLength(sliderDispatch, props.children.length)
+
+      if (!sliderState.breakpoints.length) {
+        setBreakpoints(sliderDispatch, breakpoints)
+      }
     }
-
-    console.log(sliderState)
-
-  }, [sliderState, innerWidth])
+  }, [sliderState, windowSize])
 
   return (
     <div className='sl'>
       <Wrapper properties={sliderState} dispatch={sliderDispatch}>
-        <Slide properties={sliderState}>slider 01</Slide>
-        <Slide properties={sliderState}>slider 02</Slide>
-        <Slide properties={sliderState}>slider 03</Slide>
-        <Slide properties={sliderState}>slider 04</Slide>
-        <Slide properties={sliderState}>slider 05</Slide>
-        <Slide properties={sliderState}>slider 06</Slide>
-        <Slide properties={sliderState}>slider 07</Slide>
-        <Slide properties={sliderState}>slider 08</Slide>
-        <Slide properties={sliderState}>slider 09</Slide>
+        {props.children &&
+          props.children.map((e, i) => (
+            <Slide key={i} properties={sliderState}>
+              {e}
+            </Slide>
+          ))}
       </Wrapper>
     </div>
   )
