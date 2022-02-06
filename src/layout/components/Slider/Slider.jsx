@@ -10,19 +10,19 @@ import { useWindowSize } from '../../../hooks/useWindowSize'
 import { useEffect, useReducer } from 'react'
 import { initialSliderState, sliderMiddleware } from '../../../store/Slider'
 import {
-  resize,
+  setSliderSize,
   setWindowSize,
   setBreakpoints,
   setSlidesLength,
 } from '../../../store/Slider/actions'
 
 export default function Slider(props) {
+  const { children } = props
+  const [windowSize] = useWindowSize()
   const [sliderState, sliderDispatch] = useReducer(
     sliderMiddleware,
     initialSliderState
   )
-
-  const [windowSize] = useWindowSize()
 
   useEffect(() => {
     const breakpoints = [
@@ -30,40 +30,39 @@ export default function Slider(props) {
         slideSize: 190,
         slideMargin: 5,
         slidesToShow: 3,
-        slidesToShif: 3,
+        slidesToShift: 3,
         slidesToLoad: 9,
         showButtons: false,
         showPaging: false,
-        infinite: false,
-        breakpoint: 900,
+        isInfinite: false,
+        breakpoint: 9999,
       },
       {
         slideSize: 190,
         slideMargin: 5,
         slidesToShow: 2,
-        slidesToShif: 2,
+        slidesToShift: 2,
         slidesToLoad: 6,
         showButtons: false,
         showPaging: false,
-        infinite: false,
-        breakpoint: 500,
+        isInfinite: false,
+        breakpoint: 800,
       },
       {
         slideSize: 190,
         slideMargin: 5,
         slidesToShow: 1,
-        slidesToShif: 1,
+        slidesToShift: 1,
         slidesToLoad: 3,
         showButtons: false,
         showPaging: false,
-        infinite: false,
-        breakpoint: 300,
+        isInfinite: false,
+        breakpoint: 500,
       },
     ]
 
-    // Resize the slider main exhibition properties
     if (sliderState.windowSize !== windowSize) {
-      resize(sliderDispatch, breakpoints, windowSize)
+      setSliderSize(sliderDispatch, breakpoints, windowSize)
       setWindowSize(sliderDispatch, windowSize)
       setSlidesLength(sliderDispatch, props.children.length)
 
@@ -75,13 +74,8 @@ export default function Slider(props) {
 
   return (
     <div className='sl'>
-      <Wrapper properties={sliderState} dispatch={sliderDispatch}>
-        {props.children &&
-          props.children.map((e, i) => (
-            <Slide key={i} properties={sliderState}>
-              {e}
-            </Slide>
-          ))}
+      <Wrapper state={sliderState} dispatch={sliderDispatch}>
+        {children && children.map((e, i) => <Slide key={i}>{e}</Slide>)}
       </Wrapper>
     </div>
   )

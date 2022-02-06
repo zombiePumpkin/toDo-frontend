@@ -12,13 +12,14 @@ const initialSliderState = {
   breakpoints: [],
   windowSize: 0,
   status: 'not-loaded',
+  action: 'immobile',
   // wrapper position properties
   index: 0,
   posX1: 0,
   posX2: 0,
   startPos: 0,
   endPos: 0,
-  wrapperLeftPos: 0,
+  leftPos: 0,
   limit: 50,
   allowShift: true,
   // slide amount properties

@@ -1,53 +1,74 @@
+// Set the action status of the slider
+export function setAction(dispatch, action) {
+  return dispatch({ type: 'set_action', payload: { action: action } })
+}
+
+// Set the start position before drag the wrapper
+export function setStartPos(dispatch, startPos) {
+  return dispatch({ type: 'set_start_pos', payload: { startPos: startPos } })
+}
+
+// Set the start position before drag the wrapper
+export function setEndPos(dispatch, endPos) {
+  return dispatch({ type: 'set_end_pos', payload: { endPos: endPos } })
+}
+
+export function setLeftPos(dispatch, leftPos) {
+  return dispatch({ type: 'set_left_pos', payload: { leftPos: leftPos } })
+}
+
+// Set the start position of the mouse on the wrapper
+export function setPosX1(dispatch, posX1) {
+  return dispatch({ type: 'set_pos_x1', payload: { posX1: posX1 } })
+}
+
+// Set the start position of the mouse on the wrapper
+export function setPosX2(dispatch, posX2) {
+  return dispatch({ type: 'set_pos_x2', payload: { posX2: posX2 } })
+}
+
 // Event triggered on press the button
-const dragStart = event => {
-  this.view.classList.add('grabbing');
+export function setMouseDown(dispatch, e) {
+  setAction(dispatch, 'grabbing')
+  setStartPos(dispatch, e.target.offsetLeft)
+  setPosX1(dispatch, e.clientX)
 
-  this.startPos = this.wrapper.offsetLeft;
-
-  if (event.type === 'touchstart') {
-    const touchStart = event;
-
-    this.posX1 = touchStart.touches[0].clientX;
-  } else if (event.type === 'mousedown') {
-    const mouseDown = event;
-
-    this.posX1 = mouseDown.clientX;
-    document.addEventListener('mouseup', dragEnd);
-    document.addEventListener('mousemove', dragOut);
-  }
+  console.log('mouse down')
 }
 
 // Event triggered on move the mouse pressed around the screen
-const dragOut = event => {
-  if (event.type === 'touchmove') {
-    const touchMove = event;
+export function setMouseMove(dispatch, posX1, posX2, e) {
+  const wrapper = e.currentTarget
 
-    this.posX2 = this.posX1 - touchMove.touches[0].clientX;
-    this.posX1 = touchMove.touches[0].clientX;
-  } else if (event.type === 'mousemove') {
-    const mouseMove = event;
+  setPosX2(dispatch, posX1 - e.clientX)
+  setPosX1(dispatch, e.clientX)
 
-    this.posX2 = this.posX1 - mouseMove.clientX;
-    this.posX1 = mouseMove.clientX;
-  }
+  setLeftPos(dispatch, wrapper.offsetLeft - posX2)
 
-  this.wrapper.style.left = (this.wrapper.offsetLeft - this.posX2) + 'px';
+  console.log('mouse move')
 }
 
 // Event triggered when user release the mouse button
-const dragEnd = () => {
-  this.view.classList.remove('grabbing');
+export function setMouseUp(dispatch, startPos, endPos, limit, e) {
+  const wrapper = e.currentTarget
 
-  this.endPos = this.wrapper.offsetLeft;
+  setAction(dispatch, 'immobile')
+  setEndPos(dispatch, wrapper.offsetLeft)
 
-  if (this.endPos - this.startPos < -this.limit) {
-    this.shiftSlide(1, 'drag');
-  } else if (this.endPos - this.startPos > this.limit) {
-    this.shiftSlide(-1, 'drag');
+  if (endPos - startPos < -limit) {
+    // shiftSlide(1, 'drag')
+  } else if (endPos - startPos > limit) {
+    // shiftSlide(-1, 'drag')
   } else {
-    this.wrapper.style.left = (this.startPos) + 'px';
+    setLeftPos(dispatch, startPos)
   }
+  
+  console.log('mouse up')
+}
 
-  document.removeEventListener('mouseup', dragEnd);
-  document.removeEventListener('mousemove', dragOut);
+// Event triggered when user move the mouse outside the wrapper
+export function setMouseLeave(dispatch, e) {
+  setAction(dispatch, 'immobile')
+  
+  console.log('mouse leave')
 }

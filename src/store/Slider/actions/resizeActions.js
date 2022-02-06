@@ -16,17 +16,21 @@ function build(dispatch, breakpoint) {
 }
 
 // Handle breakpoints in the page
-export function resize(dispatch, breakpoints, windowSize) {
+export function setSliderSize(dispatch, breakpoints, windowSize) {
   if (breakpoints.length > 1) {
     breakpoints.forEach((item, index) => {
       if (
         breakpoints[index + 1] !== undefined &&
         item.breakpoint >= windowSize &&
-        item.breakpoint < windowSize
+        item.breakpoint[index + 1] < windowSize
       ) {
         const breakpoint = { ...item }
         build(dispatch, breakpoint)
-      } else if (item.breakpoint >= windowSize && windowSize > 0) {
+
+      } else if (
+        item.breakpoint >= windowSize && 
+        windowSize > 0
+      ) {
         const breakpoint = { ...item }
         build(dispatch, breakpoint)
       }

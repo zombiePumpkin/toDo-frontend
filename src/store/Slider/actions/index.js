@@ -1,3 +1,18 @@
-import { resize, setWindowSize, setBreakpoints, setSlidesLength } from './resizeActions'
+import { setMouseDown, setMouseMove, setMouseUp, setMouseLeave } from './mouseActions'
+import {
+  setSliderSize,
+  setWindowSize,
+  setBreakpoints,
+  setSlidesLength,
+} from './resizeActions'
 
-export { resize, setWindowSize, setBreakpoints, setSlidesLength}
+export {
+  setMouseDown,
+  setMouseMove,
+  setMouseUp,
+  setMouseLeave,
+  setSliderSize,
+  setWindowSize,
+  setBreakpoints,
+  setSlidesLength,
+}
